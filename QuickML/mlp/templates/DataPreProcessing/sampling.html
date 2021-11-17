@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header"><label>Sampling</label></div>
+            <div class="card-body">
+                <select id="{{ id }}">
+                    <option value="" disabled selected>Choose the target feature</option>
+                    {% for feature in features %}
+                    <option  value='{{ feature }}'>{{ feature }}</option>
+                    {% endfor %}
+                </select>
+                <select id="{{ method_id }}">
+                    <option value="" disabled selected>Choose the method</option>
+                    {% for method in methods %}
+                    <option  value='{{ method }}'>{{ method }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" class="btn" id="sample_button_submit" >Sample</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="sample_info"></div>

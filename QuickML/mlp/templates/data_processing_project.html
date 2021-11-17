@@ -1,0 +1,128 @@
+<!-- start sidebar-->
+<div id="dismiss">
+    <!-- start dismiss -->
+    <p>Close</p>
+</div>
+<!-- end dismiss -->
+<div class="sidemenuHeader">
+    <label class="sidemenulabelHeader">Quick ML</label>
+</div>
+<div class="panel-group" id="accordionMenu" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="heading">
+            <a role="button" data-toggle="collapse" href="#collapseOne" aria-expanded="false"
+               aria-controls="collapseOne">
+                Exploratory Data Analysis
+            </a>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <ul class="nav">
+                    <li><a id="summary" href="#"> Summary</a></li>
+                    <li>
+                        <a id="viewAllData" href="#"> View Data</a>
+                    </li>
+                    <li><a id="visualization" href="#"> Visualization</a></li>
+                    <li>
+                        <div class="panel panel-default">
+                            <a role="button" data-toggle="collapse" href="#collapseOneOne" aria-expanded="false"
+                               aria-controls="collapseOneOne">
+                                Data Cleaning
+                            </a>
+                            <div id="collapseOneOne" class="panel-collapse collapse in" role="tabpanel">
+                                <div class="panel-body">
+                                    <ul class="nav">
+                                        <li><a id="missingvalues" style="padding-left: 35px;" href="#">Missing
+                                            Values</a></li>
+                                        <li><a id="normalization" style="padding-left: 35px;" href="#">Normalization</a>
+                                        </li>
+                                        <li><a id="outlierdetection" style="padding-left: 35px;" href="#">Outlier
+                                            Detection</a></li>
+                                        <li><a id="deletecolumn" style="padding-left: 35px;" href="#">Delete Columns</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a id="encoding" href="#">Encoding</a>
+                    </li>
+                    <li>
+                        <a id="sampling" href="#">Sampling</a>
+                    </li>
+                    <li>
+                        <a id="binning" href="#">Binning</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordionMenu" href="#collapseTwo"
+               aria-expanded="false" aria-controls="collapseTwo">
+                Develop
+            </a>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel">
+            <div class="panel-body">
+                <ul class="nav">
+                    <li>
+                        <div class="panel panel-default">
+                            <a role="button" data-toggle="collapse" href="#collapseThree" aria-expanded="false"
+                               aria-controls="collapseThree">
+                                Modelling
+                            </a>
+                            <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel">
+                                <div class="panel-body">
+                                    <ul class="nav">
+                                        <li><a id="classification" style="padding-left: 35px;" href="#">Classification</a></li>
+                                        <li><a id="clustering" style="padding-left: 35px;" href="#">Clustering</a></li>
+                                        <li><a id="regression" style="padding-left: 35px;" href="#">Regression</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="nav">
+                    <li>
+                        <div class="panel panel-default">
+                            <a role="button" data-toggle="collapse" href="#collapseValid" aria-expanded="false"
+                               aria-controls="collapseValid">
+                                Validation
+                            </a>
+                            <div id="collapseValid" class="panel-collapse collapse in" role="tabpanel">
+                                <div class="panel-body">
+                                    <ul class="nav">
+                                        <li><a id="validation" style="padding-left: 35px;" href="#">Classification Validation</a></li>
+                                        <li><a id="cluster_validation" style="padding-left: 35px;" href="#">Clustering Validation</a></li>
+                                        <li><a id="regression_validation" style="padding-left: 35px;" href="#">Regression Validation</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordionMenu" href="#collapseThree"
+               aria-expanded="false" aria-controls="collapseThree">
+                Deploy
+            </a>
+        </div>
+        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel">
+            <div class="panel-body">
+                <ul class="nav">
+                    <li><a href="#"> Docker Container</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

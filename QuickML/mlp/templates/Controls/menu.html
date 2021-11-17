@@ -1,0 +1,87 @@
+<!-- Sidebar  -->
+<nav id="sidebar">
+  <!-- start sidebar-->
+  <div id="dismiss">
+    <!-- start dismiss -->
+    <p>Close</p>
+  </div>
+  <!-- end dismiss -->
+  <div style="height: 100px; text-align: center; align: center; font-size: 24pt; padding-top: 25px; border-bottom: 1px solid white; margin-bottom: 10px;">
+    <img style="width: 50px; height: 50px; margin-right: 10px;" src="{% static 'logo.png' %}">Quick ML
+            </div>
+    <ul class="list-unstyled components">
+      <!-- start ul item -->
+      <li>
+        <!-- start li item -->
+        <a class="menuitems" >Exploratory Data Analysis</a>
+        <ul class="list-unstyled">
+          <li>
+            <a  id="summary" >Summary</a>
+          </li>
+          <li>
+            <a id="visualization">Visualization</a>
+          </li>
+          <li>
+            <a id="submenu">Data Cleaning</a>
+            <ul class="list-unstyled">
+              <li>
+                <a id="missingvalues">Missingvalues</a>
+              </li>
+              <li>
+                <a id="normalization">Normalization</a>
+              </li>
+              <li>
+                <a id="outlierdetection">Outlier Detection</a>
+              </li>
+              <li>
+                <a id="deletecolumn">Delete Columns</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a id="submenu">Encoding</a>
+            <ul class="list-unstyled">
+              <li>
+                <a id="labelencoding">Label Encoding</a>
+              </li>
+              <li>
+                <a id="onehotencoding">One Hot Encoding</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a id="featurescoring">Feature Scoring</a>
+          </li>
+        </ul>
+      </li>
+      <!-- end li item -->
+      <li class="limenu">
+        <!-- start li item -->
+        <a class="menuitems" >Develop</a>
+        <ul class="list-unstyled">
+          <li>
+            <a  id="comparison" >Algorithm Comparison</a>
+          </li>
+          <li>
+            <a  id="trainmodel" >Train Model</a>
+          </li>
+          <li>
+            <a id="testmodel">Test Model</a>
+          </li>
+        </ul>
+      </li>
+      <!-- end li item -->
+      <li class="limenu">
+        <!-- start li item -->
+        <a class="menuitems" >Deploy</a>
+        <ul class="list-unstyled">
+          <li>
+            <a  id="dockercontainer" >Docker Container</a>
+          </li>
+        </ul>
+      </li>
+      <!-- end li item -->
+    </ul>
+    <!-- end ul item -->
+</nav>
+<!-- end sidebar -->

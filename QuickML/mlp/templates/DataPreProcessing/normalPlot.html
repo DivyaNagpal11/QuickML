@@ -1,0 +1,8 @@
+<label>Normal Distribution Plot</label>
+<div style="float: right">
+    <select style="width: 100px"  onchange="normal_distribution_plot()" id="normaldistributionchart">
+        {% for col in features %}
+        <option  value='{{ col }}'>{{ col }}</option>
+        {% endfor %}
+    </select>
+</div>

@@ -1,0 +1,6 @@
+<select id="selecteclusterdalgorithm" onchange="get_selected_cluster_algorithm_parameter()">
+    <option value="" disabled selected>Choose Algorithm</option>
+    {% for algorithm in algorithms %}
+        <option  value='{{ algorithm }}'>{{ algorithm }}</option>
+    {% endfor %}
+</select>

@@ -1,0 +1,8 @@
+<label>Distribution Plot</label>
+<div style="float: right">
+    <select style="width: 100px"  onchange="distribution_plot()" id="distributionchartcol">
+        {% for col in features %}
+        <option  value='{{ col }}'>{{ col }}</option>
+        {% endfor %}
+    </select>
+</div>

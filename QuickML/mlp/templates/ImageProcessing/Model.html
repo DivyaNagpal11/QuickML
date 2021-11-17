@@ -1,0 +1,302 @@
+{% load staticfiles %}
+{% load static %}
+<div id="accordion">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+          <a role="button" id="convolution" style="color: #666666;font-size: 17px;" data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              Convolution
+          </a>
+    </div>
+
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+      <div class="card-body">
+       <table id="convInput" class="table table-responsive">
+           <thead>
+                <tr>
+                    <th>Index No</th>
+                    <th>Filters</th>
+                    <th>Kernel Size</th>
+                    <th>Strides</th>
+                    <th>Padding</th>
+                    <th>Activation</th>
+                </tr>
+           </thead>
+           <tbody id="show_conv_table_data">
+           </tbody>
+                    <tbody>
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td>
+                                 <input id="filters_id" type="text" name="filters" required="required" value="8"  style="width:70px;">
+                            </td>
+
+                            <td>
+                                <input id="kernel_id" type="text" name="kernel" required="required" value="2"  style="width:70px;">
+                            </td>
+
+                            <td>
+                                <input id="stride_id" type="text" name="stride" required="required" value="1"  style="width:70px;">
+                            </td>
+
+                            <td>
+                                <select id="padding_id" required="required" name="padding"  style="width:70px;" >
+                                            <option value="valid">Valid</option>
+                                            <option value="same">Same</option>
+                                         </select>
+                            </td>
+
+                            <td>
+                                <select id="activation_id" required="required" name="activation"  style="width:70px;">
+                                            <option value="relu">Relu</option>
+                                            <option value="sigmoid">Sigmoid</option>
+                                            <option value="tanh">Tanh</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+           <div style="float: right">
+                    <button id="conv_button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                        Add
+                    </button>
+           </div>
+           <div class="modal fade" id="myModal">
+               <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body" id="filters_conv">
+
+                        </div>
+                    </div>
+               </div>
+            </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+          <a role="button" id="MaxPooling" style="color: #666666;font-size: 17px;"data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              MaxPooling
+          </a>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+      <div class="card-body">
+             <table id="maxInput" class="table table-responsive">
+                 <thead>
+                    <tr>
+                        <th>Index No</th>
+                        <th>Pool Size</th>
+                        <th>Strides</th>
+                        <th>Padding</th>
+                    </tr>
+                </thead>
+                 <tbody id="show_maxpool_table_data">
+                 </tbody>
+                 <tbody>
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td>
+                                 <input id="pool_id" type="text" name="pool_size" required="required" value="2" style="width:70px;">
+                            </td>
+
+                            <td>
+                                <input id="stride" type="text" name="stride" required="required" value="1" style="width:70px;">
+                            </td>
+
+                            <td>
+                                <select id="padding" required="required" name="padding" style="width:70px;">
+                                            <option value="valid">Valid</option>
+                                            <option value="same">Same</option>
+                                         </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+          <div style="float: right">
+                    <button id="max_pool_button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal1">
+                        Add
+                    </button>
+           </div>
+           <div class="modal fade" id="myModal1">
+               <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body" id="filters_max">
+
+                        </div>
+                    </div>
+               </div>
+            </div>
+         </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingThree">
+          <a role="button" id="DropOut" style="color: #666666;font-size: 17px;"data-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              DropOut
+          </a>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+      <div class="card-body">
+             <table id="dropInput" class="table table-responsive">
+                 <thead>
+                    <tr>
+                        <th>Index No</th>
+                        <th>Dropout Rate</th>
+                        <th>Seed</th>
+                    </tr>
+                </thead>
+                 <tbody id="show_dropout_table_data">
+                 </tbody>
+                    <tbody>
+                        <tr>
+                            <td>
+
+                            </td>
+
+                            <td>
+                                 <input id="rate_id" type="text" name="drop_size" required="required" value="0.2" style="width:70px;">
+                            </td>
+
+                            <td>
+                                <input id="seed" type="text" name="seed" required="required" value="1" style="width:70px;">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+          <div style="float: right">
+                    <button id="drop_button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal2">
+                        Add
+                    </button>
+           </div>
+           <div class="modal fade" id="myModal2">
+               <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body" id="filters_drop">
+
+                        </div>
+                    </div>
+               </div>
+            </div>
+        </div>
+    </div>
+  </div>
+    <div class="card">
+    <div class="card-header" id="headingFour">
+          <a role="button" style="color: #666666;font-size: 17px;"data-toggle="collapse" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+              Flatten
+          </a>
+    </div>
+    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+      <div class="card-body">
+          <div>
+                    <button id="flatten_button" type="button" class="btn btn-primary">
+                        Add
+                    </button>
+           </div>
+        </div>
+    </div>
+  </div>
+    <div class="card">
+    <div class="card-header" id="headingFive">
+          <a role="button" id="Dense" style="color: #666666;font-size: 17px;"data-toggle="collapse" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+              Dense
+          </a>
+    </div>
+    <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+      <div class="card-body">
+             <table id="denseInput" class="table table-responsive">
+                 <thead>
+                    <tr>
+                        <th>Index No</th>
+                        <th>Output Units</th>
+                        <th>Activation</th>
+                    </tr>
+                </thead>
+                 <tbody id="show_dense_table_data">
+                 </tbody>
+                    <tbody>
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td>
+                                 <input id="unit_id" type="text" name="units" required="required" value="2" style="width:70px;">
+                            </td>
+
+                            <td>
+                                <select id="activation" required="required" name="activation" style="width:70px;">
+                                            <option value="softmax">Softmax</option>
+                                            <option value="sigmoid">Sigmoid</option>
+                                            <option value="tanh">Tanh</option>
+                                            <option value="relu">Relu</option>
+                                            <option value="softsign">Softsign</option>
+                                            <option value="softplus">Softplus</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+          <div style="float: right">
+                    <button id="dense_button" type="button" class="btn btn-primary">
+                        Add
+                    </button>
+           </div>
+        </div>
+    </div>
+  </div>
+    <div class="card">
+    <div class="card-header" id="headingSix">
+          <a role="button" id="Fitting" style="color: #666666;font-size: 17px;"data-toggle="collapse" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+              Model Fitting
+          </a>
+    </div>
+    <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+      <div class="card-body">
+             <table id="fitInput" class="table table-responsive">
+                 <thead>
+                    <tr>
+                        <th>Batch Size</th>
+                        <th>Epochs</th>
+                        <th>Verbose</th>
+                        <th>Validation Split</th>
+                    </tr>
+                </thead>
+                 <tbody id="show_fit"></tbody>
+                    <tbody>
+                        <tr>
+                            <td>
+                                 <input id="batch_id" type="text" name="batch_size" required="required" value="50" style="width:70px;">
+                            </td>
+                            <td>
+                                <input id="epochs" type="text" name="epochs" required="required" value="3" style="width:70px;">
+                            </td>
+                            <td>
+                                <input id="verbose" type="text" name="verbose" required="required" value="1"style="width:70px;">
+                            </td>
+                            <td>
+                                <input id="val" type="text" name="val" required="required" value="0.1" style="width:70px;">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+          <div style="float: right">
+                    <button id="fit_button" type="button" class="btn btn-primary">
+                        Fit
+                    </button>
+           </div>
+        </div>
+    </div>
+  </div>
+</div>

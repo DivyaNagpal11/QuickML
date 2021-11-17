@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <label>Target Feature</label>
+            </div>
+            <div class="card-body" style="min-height: 100px">
+                <select style="width:100%;" id="regression_selected_target_feature">
+                    <option value="" disabled selected>Choose the target feature</option>
+                    {% for feature in features %}
+                    <option  value='{{ feature }}'>{{ feature }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <label>Test and Train Data Info</label>
+            </div>
+            <div class="card-body" style="min-height: 100px">
+                <p style="display: inline-block">Test data size :</p>
+                <input id="regression_testdatasize" onchange="regression_train_size()" type="number" value="0.25" required="required" min="0.1">
+                <div>
+                    <p style="display: inline-block">Train data size :</p>
+                    <p id="regression_traindatasize" style="display: inline-block">0.75</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card">
+            <div class="card-header">
+                <label>Algorithm</label>
+            </div>
+            <div style="min-height: 100px" class="card-body">
+                <div style="display: inline-block" id="regression_algorithm_select">
+
+                </div>
+                <div style="float: right" id="regression_algorithm_add_process">
+                    <button  type="button" class="btn" id="addregrssionalgorithm">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="regressiondatatable">
+            <div class="card">
+                <div class="card-header">
+                    <label>Algorithms Info</label>
+                </div>
+                <div class="card-body">
+                    <table id="regression_table_data" class="table table-responsive hidediv ">
+                        <thead>
+                            <tr>
+                                <th>S.NO</th>
+                                <th>Algorithm</th>
+                                <th>Train R-Squared</th>
+                                <th>Train Adj.R-squared</th>
+                                <th>Run</th>
+                                <th>Publish</th>
+                                <th>Api_url</th>
+                            </tr>
+                        </thead>
+                        <tbody id="regression_table_body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="regSummary">
+            <div class="card">
+                <div class="card-header">
+                    <label>Regression Summary</label>
+                </div>
+                <div class="card-body hidediv" id="regOLSSummary">
+
+                    <table id="regression_table_score_data" class="table table-responsive ">
+                        <thead>
+                            <tr>
+                                <th>R-squared</th>
+                                <th>Adj.R-squared</th>
+                                <th>F-statistic</th>
+                                <th>AIC</th>
+                                <th>BIC</th>
+                                <th>Unchecked Feature</th>
+                            </tr>
+                        </thead>
+                        <tbody id="regression_table_score_body">
+                        </tbody>
+                    </table>
+                    <div id="ols_table">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                    <label>Image Prediction</label>
+                </div>
+                <div class="card-body row">
+                    <div class="col-lg-7">
+                        <div>
+                            <label>Upload Image:</label>
+                        </div>
+                        <br>
+                        <div>
+                            <form id="image_validation_form" method="post" enctype="multipart/form-data">
+                                <input id="uploadImage" type="file" name="myPhoto" onchange="PreviewImage();">
+                            </form>
+                        </div>
+                        <br>
+                        <div>
+                            <img id="uploadPreview" style="width: 100px; height: 100px;">
+                        </div>
+                        <br>
+                        <div>
+                            <button id="submit_button" type="button" class="btn btn-sm btn-primary">Submit</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="card-body">
+                            <p style="display: inline-block"> Output : </p><p id="predicted_output"></p>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+
+

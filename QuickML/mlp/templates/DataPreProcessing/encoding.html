@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <label>Encoding of Features</label>
+                <p>Need not encode the target categorical feature</p>
+            </div>
+            <div class="card-body">
+                <select id="encodingmethod">
+                    {% for method in methods %}
+                    <option  value='{{ method }}'>{{ method }}</option>
+                    {% endfor %}
+                </select>
+                <table class="table table-responsive" id="encoding_table_data">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feature in features %}
+                            <tr>
+                            <td>{{ feature }}</td>
+                            <td><input id="checkbox" type="checkbox" ></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button id="encodingmethodsubmit" type="button" class="btn ">Encode</button>
+            </div>
+        </div>
+    </div>
+</div>

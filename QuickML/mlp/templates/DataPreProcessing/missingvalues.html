@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <label>Missing Values Imputation</label>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive" id="missingtabledata">
+                    <thead>
+                        <tr>
+                            <td>Feature</td>
+                            <td>Type</td>
+                            <td>Count</td>
+                            <td>Action</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for each in tabledata %}
+                        <tr>
+                            <td >{{ each.col }}</td>
+                            <td>{{ each.type }}</td>
+                            <td>{{ each.count }}</td>
+                            <td >
+                                <select id="missingmethod">
+                                    <option value="" disabled selected>Choose the Method</option>
+                                    {% for col in each.replace %}
+                                    <option  value="{{ col }}">{{ col }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <input class="hidediv" type="number"  placeholder="Enter the value">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn" id="missingvaluessubmit">Impute</button>
+            </div>
+        </div>
+    </div>
+</div>

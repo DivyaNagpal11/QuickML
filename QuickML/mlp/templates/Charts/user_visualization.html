@@ -1,0 +1,5 @@
+<select style="float: right" id="{{ id }}" onchange="{{ function }}">
+    {% for col in features %}
+    <option  value='{{ col }}'>{{ col }}</option>
+    {% endfor %}
+</select>

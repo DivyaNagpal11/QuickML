@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <label>Deleting Features</label>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive" id="delete_table_data">
+                    <thead>
+                        <tr>
+                            <td>Feature</td>
+                            <td>Select</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feature in features %}
+                        <tr>
+                            <td >{{ feature }}</td>
+                            <td><input id="checkbox" type="checkbox" ></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn" id="delete_feature_submit">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

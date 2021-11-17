@@ -1,0 +1,13 @@
+<label>Box Plot</label>
+<div style="float: right">
+    <select style="width: 100px" onchange="box_plot()" id="boxplotcol1">
+        {% for col in features %}
+        <option  value='{{ col }}'>{{ col }}</option>
+        {% endfor %}
+    </select>
+    <select style="width: 100px"  onchange="box_plot(1)" id="boxplotcol2">
+        {% for col in features1 %}
+        <option  value='{{ col }}'>{{ col }}</option>
+        {% endfor %}
+    </select>
+</div>

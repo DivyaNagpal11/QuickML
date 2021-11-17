@@ -1,0 +1,10 @@
+<div >
+    <select id="barplotcol">
+    {% for col in features %}
+        <option  value={{ col }}>{{ col }}</option>
+    {% endfor %}
+  </select>
+  <button id="barplotsubmit" type="button" class="btn btn-sm btn-primary">Plot</button>
+    <div id="barplot">
+    </div>
+    </div>

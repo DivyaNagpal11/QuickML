@@ -1,0 +1,7 @@
+<ul>
+    {% for p_id,p_name in projects %}
+    <li  id="dpmi">
+        <a  href='{% url "project" value=p_id %}' >{{ p_name }}</a>
+    </li>
+    {% endfor %}
+</ul>

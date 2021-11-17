@@ -1,0 +1,5 @@
+{% load staticfiles %}
+{% load static %}
+{% for each in img_name %}
+    <img src ="{% static 'Resources/' %}{{each}}" alt="Picture">
+{% endfor %}

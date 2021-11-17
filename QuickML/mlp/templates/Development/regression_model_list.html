@@ -1,0 +1,6 @@
+<select id="selecteregressiondalgorithm">
+    <option value="" disabled selected>Choose Algorithm</option>
+    {% for algorithm in algorithms %}
+        <option  value='{{ algorithm }}'>{{ algorithm }}</option>
+    {% endfor %}
+</select>

@@ -1,0 +1,76 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <label>Algorithm</label>
+            </div>
+            <div style="display: inline-block" class="card-body">
+                <div style="display: inline-block" id="cluster_models_select">
+
+                </div>
+                <div style="float: right" id="cluster_models_add_process" class="hidediv">
+                    <button  type="button" class="btn" id="addclusteralgorithm">Add</button>
+                </div>
+                <br><br>
+                <div id="elbow_clusterplot" class="hidediv">
+                    <div class="card">
+                        <div class="card-header">
+                            <label>Elbow Plot</label>
+                        </div>
+                        <div class="card-body" id="elbowclusterplot">
+
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <div id="cluster_models_input_parameters" class="hidediv" >
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="algorithmdatatable">
+            <div class="card">
+                <div class="card-header">
+                    <label>Algorithms Info</label>
+                </div>
+                <div class="card-body">
+                    <table id="cluster_algorithm_table_data" class="table table-responsive hidediv">
+                        <thead>
+                            <tr>
+                                <th>S.NO</th>
+                                <th>Algorithm</th>
+                                <th>No of Clusters</th>
+                                <th>Edit</th>
+                                <th>Run</th>
+                                <th>Label</th>
+                                <th>Option</th>
+                                <th>Publish</th>
+                                <th>Api_url</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cluster_algorithm_table_body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="cluster_plot">
+            <div class="card">
+                <div class="card-header">
+                    <label>Plot</label>
+                </div>
+                <div class="card-body hidediv" id="clusterplot">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

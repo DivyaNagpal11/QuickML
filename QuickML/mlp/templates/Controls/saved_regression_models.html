@@ -1,0 +1,3 @@
+{% for model in saved_regression_models %}
+    <li style="list-style: none">{{ model.algorithm }} : {{ model.train_Rsq }} % , {{ model.train_adjRsq }} % </li>
+{% endfor %}

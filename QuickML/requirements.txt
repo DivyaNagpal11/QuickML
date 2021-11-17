@@ -1,0 +1,7 @@
+Django
+plotly
+pandas
+scikit-learn
+gunicorn
+xgboost
+xlrd

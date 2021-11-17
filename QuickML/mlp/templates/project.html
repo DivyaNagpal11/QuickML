@@ -1,0 +1,158 @@
+{% load staticfiles %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>welcome</title>
+        <!-- Bootstrap CSS CDN -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        <!-- Our Custom CSS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'Styles/prjstyle.css' %}">
+        <script src="{% static 'Scripts/project.js' %}"></script>
+        <script src="{% static 'Scripts/EDAJS.js' %}"></script>
+        <script src="{% static 'Scripts/ClassificationJS.js' %}"></script>
+        <script src="{% static 'Scripts/ClusteringJS.js' %}"></script>
+        <script src="{% static 'Scripts/RegressionJS.js' %}"></script>
+        <script src="{% static 'Scripts/ImageJS.js' %}"></script>
+        <script src="{% static 'Scripts/cash_forecasting.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+            integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+            crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+                integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+                crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <!-- start container -->
+            <nav id="navhead" class="navbar">
+                <!-- start navbar -->
+                <a class="navbar-brand" href="//127.0.0.1:8000">
+                    <img id="logo" src="{% static 'Images/cernerlogo.svg' %}" >
+                </a><!-- Cerner Logo-->
+                <ul class="nav navbar-right" id="nav_options_id">
+                    <!-- start ul item -->
+                    <li class="nav-item">
+                        <!-- start li item -->
+                        <div id="settings-menu" class="dropdown">
+                            <button  class="btn btn-sm dropdown-toggle" data-toggle="dropdown" type="button" >Options</button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <ul>
+                                    <li>
+                                        <a href="#" style="cursor: pointer" onclick="go_back_one_step()">Undo</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" onclick="DeleteCheck()" style="cursor: pointer">Delete</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div id="cash" class="dropdown">
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <!-- start li item -->
+                        <div class="dropdown">
+                            <!-- start dropdown -->
+                            <button id="selectprojectbtn" type="button" class="btn btn-sm  dropdown-toggle" data-toggle="dropdown" value={{ id }}>
+                            {{ p_name }}
+                            </button>
+                            <div id="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+                                <!-- start dropdown menu -->
+                            </div>
+                            <!-- end dropdown menu -->
+                        </div>
+                        <!-- end dropdown -->
+                    </li>
+                    <!-- end li item -->
+                    <li class="nav-item">
+                        <!-- start li item -->
+                        <button id="createproject" class="btn btn-sm" type="button" role="button">
+                            <img style="height: 18px; width: 18px; background: #fbb731;" src="{% static 'Images/add.png' %}">
+                        </button>
+                    </li>
+                    <!-- end li item -->
+                </ul>
+                <!-- end ul item -->
+            </nav>
+            <!-- end navbar -->
+        </div>
+        <!-- end div container-fluid -->
+
+        <div id="project" class="container jumbotron">
+            <!-- start create project  -->
+            <div class="card">
+                <div class="card-header">
+                    <label>Create Project</label>
+                    <button id="createprojectclose" type="button" class="close" aria-label="close" >
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <form id="createprojectform" action="{% url 'createproject' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <p id="p_name">Project Name:</p>
+                            <input id="enterprojectname" type="text" class="form-control" name="project_name" required="required">
+                        </div>
+                        <div class="form-group">
+                            <p >Project Type:</p>
+                              <select id="p_type" name="Project Type">
+                                <option value="Data Processing">Data Processing</option>
+                                <option value="Image Processing">Image Processing</option>
+                                <option value="Cash Forecasting">Cash Forecasting</option>
+                              </select>
+                        </div>
+                        <input id="choosefile" type="file"
+                               accept=".xlsx, .xls, .csv"
+                            title="Upload  file"
+                            name="data_file"
+                            required="required">
+                        <input id="createprojectsubmit" type="submit" value="Submit" >
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end create project-->
+        <div class="wrapper" id="wrapper_id">
+            <!-- start wrapper-->
+            <!-- Sidebar  -->
+            <nav id="sidebar">
+
+            </nav>
+            <!-- end sidebar -->
+            <!-- content-->
+            <div id="content" class="jumbotron">
+                <!-- start content-->
+                <div id="alert" style="width: available;margin: 10px;z-index: 5000;position: absolute;padding-left: 31px;" class="alert alert-danger fade in alert-dismissible show hidediv">
+                    <button type="button" class="close"  aria-label="Close" id="alertclose">
+                    <span aria-hidden="true" style="font-size:20px">×</span>
+                    </button>
+                    <strong id="alertdata"></strong>
+                </div>
+                <div class="loader" id='div_loader'>
+                    <div class="shade"></div>
+                    <div class="popup">
+                    </div>
+                </div>
+                <div id="header-info">
+                </div>
+                <div id="contentdata">
+                </div>
+            </div>
+            <!-- end content-->
+            <div id="rightsidebar" class="rightbar">
+            </div>
+        </div>
+        </div>
+    </body>
+</html>

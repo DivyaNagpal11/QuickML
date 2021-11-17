@@ -1,0 +1,16 @@
+<div class="card">
+    <div class="card-header">
+        <label>Validations</label>
+    </div>
+    <div class="card-body">
+        <select  id="validation_regression_selected_algorithm" onchange="regression_validate_get_info()">
+            <option value="" disabled selected>Choose Model</option>
+            {% for each in algorithms %}
+            <option  value='{{ each }}'>{{ each }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+<div id="validation_regression_data">
+
+</div>

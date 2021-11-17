@@ -1,0 +1,57 @@
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header">
+                <label>Normalization of Features</label>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive" id="normalizationtabledata">
+                    <thead>
+                        <tr>
+                            <td>Feature</td>
+                            <td>Minimum</td>
+                            <td>Maximum</td>
+                            <td>Action</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for each in table_data %}
+                        <tr>
+                            <td>{{ each.feature }}</td>
+                            <td>{{ each.min }}</td>
+                            <td>{{ each.max }}</td>
+                            <td>
+                                <select id="normalizationmethod">
+                                    <option value="" disabled selected>Choose the Method</option>
+                                    {% for method in each.action %}
+                                    <option  value="{{ method }}">{{ method }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <input class="hidediv" type="number"  placeholder="Enter the value" required style="width: content-box">
+                            </td>
+                            <td>
+                                <input class="hidediv" type="number"  placeholder="Enter the value" required>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn " id="normalizationsubmit">Normalize</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card">
+            <!-- start card-->
+            <div id="distributionid" class="card-header">
+            </div>
+            <div id="distributiondata" class="card-body">
+            </div>
+        </div>
+        <!-- end card-->
+    </div>
+</div>

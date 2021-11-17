@@ -1,0 +1,13 @@
+<label>Scatter Plot</label>
+<div style="float: right">
+    <select style="width: 100px"  onchange="scatter_plot()" id="scatterplotcol1">
+        {% for col in features %}
+        <option  value='{{ col }}'>{{ col }}</option>
+        {% endfor %}
+    </select>
+    <select style="width: 100px"  onchange="scatter_plot()" id="scatterplotcol2">
+        {% for col in features1 %}
+        <option  value='{{ col }}'>{{ col }}</option>
+        {% endfor %}
+    </select>
+</div>

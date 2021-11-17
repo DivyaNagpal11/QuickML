@@ -1,0 +1,19 @@
+{% load staticfiles %}
+{% load static %}
+
+<div class="row">
+  <div class="col-lg-7">
+      <div class="card">
+        {% for each in tabledata %}
+        <div class="card-header" id="{{each.category}}">
+          <label>{{each.category}}</label>
+        </div>
+        <div class="card-body"  id="{{each.path}}">
+          <img src ="{% static 'Resources/' %}{{each.path}}" class="responsive" style="width:100%; height:100%" alt="Profile Picture">
+        </div>
+        {% endfor %}
+      </div>
+  </div>
+</div>
+
+

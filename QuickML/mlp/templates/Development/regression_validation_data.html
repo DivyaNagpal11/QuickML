@@ -1,0 +1,48 @@
+ <div class="row">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header">
+                    <label>Input</label>
+                </div>
+                <div class="card-body">
+                    <table id="regression_validation_input_table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Feature
+                                </th>
+                                <th>
+                                    Input
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for each in features %}
+                                <tr>
+                                    <td>
+                                        {{ each }}
+                                    </td>
+                                    <td>
+                                        <input placeholder="Enter the value">
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            <div class="card-footer">
+                <button type="button" class="btn"  onclick="regression_predict_output()">Validate</button>
+            </div>
+        </div>
+    </div>
+    <div  class="col-lg-5 ">
+        <div class="card">
+            <div class="card-header">
+                <label>Output</label>
+            </div>
+            <div class="card-body">
+                <p style="display: inline-block">{{ output_feature }} : </p><p id="regression_prediction_result" style="display: inline-block"></p>
+            </div>
+        </div>
+    </div>
+</div>

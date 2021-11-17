@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-lg-7" id="page_partition1">
+        <div class="card">
+            <div class="card-header">
+                <label>Outliers Handling</label>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive" id="outlierstabledata">
+                    <thead>
+                        <tr>
+                            <td>Feature</td>
+                            <td>outliers</td>
+                            <td>Select</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for  key, value in table_data.items %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td>{{ value }}</td>
+                            <td><input id="checkbox" type="checkbox" ></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn " id="outlierssubmit">Delete</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card">
+            <!-- start card-->
+            <div id="boxplotid" class="card-header">
+            </div>
+            <div id="boxplotdata" class="card-body">
+            </div>
+        </div>
+        <!-- end card-->
+    </div>
+</div>

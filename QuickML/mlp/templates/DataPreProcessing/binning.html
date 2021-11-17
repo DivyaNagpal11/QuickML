@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-lg-12" id="page_partition1">
+        <div class="card">
+            <div class="card-header">
+                <label>Binning of features</label>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive" id="binningtabledata">
+                    <thead>
+                        <tr>
+                            <td>Feature</td>
+                            <td>Method</td>
+                            <td id="binOption" class="binVisible hidediv">Option</td>
+                            <td id="binName" class="binVisible hidediv"> Bins </td>
+                            <td id="binSelfLabel" class="binVisible hidediv"> Manual Labeling </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for each in table_data %}
+                        <tr>
+                            <td>{{ each.feature }}</td>
+                            <td>
+                                <select id="binningmethod"> <!-- Displaying the Methods 1) Width 2) Frequency -->
+                                    <option value="" disabled selected>Choose the Binning Method</option>
+                                    {% for action in each.action %}
+                                    <option  value="{{ action }}">{{ action }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select id="binningoption" class="binOption hidediv"> <!-- Displaying the Options 1) Auto Labeling 2) Manual Labeling -->
+                                    <option value="" disabled selected>Choose the Labeling Method</option>
+                                    {% for option in each.option %}
+                                    <option  value="{{ option }}">{{ option }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td><input class="binNum hidediv" type="number" min="2" placeholder="Enter Number " style="width:120px" required></td>
+                            <td><input class="binLabels hidediv" type="text" placeholder="Eg: Bad,Medium,Great" style="width: content-box" required></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn " id="binningsubmit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <label>Target Feature</label>
+            </div>
+            <div class="card-body" style="min-height: 140px">
+                <select id="selectedtargetfeature">
+                    <option value="" disabled selected>Choose the target feature</option>
+                    {% for feature in features %}
+                    <option  value='{{ feature }}'>{{ feature }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <label>Test and Train Data Info</label>
+            </div>
+            <div class="card-body" style="min-height: 140px">
+                <p style="display: inline-block">Test data size :</p>
+                <input id="testdatasize" onchange="train_size()" type="number" value="0.25" required="required" min="0.1">
+                <div>
+                    <p style="display: inline-block">Train data size :</p>
+                    <p id="traindatasize" style="display: inline-block">0.75</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card">
+            <div class="card-header">
+                <label>Options</label>
+            </div>
+            <div class="card-body" style="min-height: 140px">
+                <div>
+                    <p style="display: inline-block">Random State :</p>
+                    <input  id="randomstate" type="checkbox" >
+                </div>
+                <div>
+                    <p style="display: inline-block">Apply Scaling :</p>
+                    <input id="scaling" type="checkbox" >
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <label>Algorithms</label>
+            </div>
+            <div style="display: inline-block" class="card-body">
+                <select id="type_of_algorithm" onchange="get_models_list()">
+                    <option value="" disabled selected>Choose type of algorithms</option>
+                    <option  value='classification'>Classification</option>
+                </select>
+                <div style="display: inline-block" id="models_select">
+
+                </div>
+                <div style="float: right" id="models_add_process" class="hidediv">
+                <button  type="button" class="btn" id="addalgorithm">Add</button>
+                </div>
+                <div id="models_input_parameters" class="hidediv" >
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="algorithmdatatable">
+            <div class="card">
+                <div class="card-header">
+                    <label>Algorithms Info</label>
+                </div>
+                <div class="card-body">
+                    <table id="algorithm_table_data" class="table table-responsive hidediv ">
+                        <thead>
+                            <tr>
+                                <th>S.NO</th>
+                                <th>Algorithm</th>
+                                <th>Train Accuracy</th>
+                                <th>Test Accuracy</th>
+                                <th>F1-Score</th>
+                                <th>Edit</th>
+                                <th>Run</th>
+                                <th>Publish</th>
+                                <th>Api_url</th>
+                            </tr>
+                        </thead>
+                        <tbody id="algorithm_table_body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

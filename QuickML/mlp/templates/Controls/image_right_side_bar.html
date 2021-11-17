@@ -1,0 +1,14 @@
+<div class="card">
+    <div class="card-header"><label>Category Info</label></div>
+    <div class="card-body">
+        {% for i in labels %}
+            <li>{{ i }}</li>
+        {% endfor %}
+    </div>
+</div>
+<div class="card hidediv" id="model_info">
+    <div class="card-header"><label>Model Info</label></div>
+    <div class="card-body">
+        <p>Accuracy: {{ accuracy }}%</p>
+    </div>
+</div>
