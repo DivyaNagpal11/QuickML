@@ -80,13 +80,4 @@ urlpatterns = [
     path('nn_model_fit/', views.fit_handling),
     path('nn_validate/', views.validate_handling, name='nn_validate'),
     path('nn_validate_image/', views.image_handling),
-    path('cf_basicstats/', views.cf_basicstats),
-    path('cf_timeseries/', views.cf_timeseries),
-    path('cf_weekdays/', views.cf_weekdays),
-    path('cf_encounter_class/', views.cf_encounter_class),
-    path('cf_financial_class/', views.cf_financial_class),
-    path('cf_xregs/', views.cf_xregs),
-    path('cf_xregs_select/', views.cf_xregs_select),
-    path('cf_acf_pacf/', views.cf_acf_pacf),
-    path('cf_forecast/', views.cf_forecast),
 ]

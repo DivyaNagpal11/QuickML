@@ -37,7 +37,6 @@ function ajax_request(request_type, url, data) {
             });
         }
         else {
-            console.log(request_type,url,data)
             $.ajax({
                 type: request_type,
                 url: url,
@@ -114,33 +113,21 @@ function right_side_bar() {
     let project_id = $("#selectprojectbtn").val();
     let data = {"project_id": project_id, 'csrfmiddlewaretoken': $("#csrfmiddlewaretoken").val()};
     ajax_request("POST", "/right_side_bar/", data).then(function (response) {
-        if (response !== null || response !== undefined)
-        {
-
+        if (response !== null || response !== undefined) {
             if(response['project_type']=="Data Processing") {
-                showloading()
                 $('#rightsidebar').html(response['right_side_bar_html']);
                 $("#saved_models_info").html(response['saved_models_info_html']);
                 $("#saved_cluster_models").html(response['saved_cluster_models_info_html']);
                 $("#saved_regression_models").html(response['saved_regression_models_info_html']);
                 hideloading();
             }
-             else if(response['project_type'] == "Cash Forecasting")
-            {
-                showloading()
-                $('#rightsidebar').html(response['right_side_bar_html']);
-                $('#header-info').html(response['billing_entity_html']);
-                hideloading()
-            }
             else {
                 if(response['saved_model']===1) {
-                    showloading()
                     $('#rightsidebar').html(response['right_side_bar_html']);
                     $("#model_info").removeClass("hidediv");
                     hideloading();
                 }
                 else {
-                    showloading()
                     $('#rightsidebar').html(response['right_side_bar_html']);
                     hideloading();
                 }
@@ -155,12 +142,9 @@ $(document).on('click', '#createprojectsubmit', function (event) {
     event.preventDefault();
     let data = new FormData();
     let p_name = $("#enterprojectname").val();
-    let p_type = $("#p_type").val();
-    console.log(p_type)
     let file = $('#choosefile')[0].files[0];
     data.append('project_file', file);
     data.append('project_name', p_name);
-    data.append('project_type', p_type)
     data.append('csrfmiddlewaretoken',$('input[name=csrfmiddlewaretoken]').val());
     ajax_request("POST", "/cps/", data).then(function (response)
     {
@@ -231,13 +215,11 @@ $(document).ready(function () {
 
 
 $(document).on('change', '#p_type', function (event) {
-    if (this.value == "Image Processing")
-    {
-        document.getElementById("choosefile").accept = ".zip";
-    }
-    else
-    {
+    if (this.value === "Data Processing") {
         document.getElementById("choosefile").accept = ".xlsx, .xls, .csv";
+    } else if (this.value == "Image Processing") {
+        //$('#settings-menu').addClass('hidediv');
+        document.getElementById("choosefile").accept = ".zip";
     }
 });
 

@@ -58,7 +58,7 @@ def create_img_labels(project_id):
                 img.append(np.array(size_image))
                 labels.append(x)
             except AttributeError:
-                raise Exception()
+                print("")
         x += 1
     img = np.array(img)
     labels = np.array(labels)

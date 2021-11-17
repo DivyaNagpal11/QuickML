@@ -23,8 +23,6 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from keras.models import load_model
-from .cash_functions import *
-from dateutil.relativedelta import relativedelta
 
 
 @csrf_exempt
@@ -54,12 +52,11 @@ def project(request, value):
 @csrf_exempt
 def create_project(request):
     name = request.POST.get('project_name')
-    type = request.POST.get('project_type')
     file = request.FILES["project_file"]
     data_base = SparkDataBase()
     project_id = data_base.create_id()
     status = 'active'
-    data_base.read_data(name, file, project_id, status,type)
+    data_base.read_data(name, file, project_id, status)
     redirect_url = '/project/' + str(project_id)
     return JsonResponse({"new_url":redirect_url})
 
@@ -72,12 +69,9 @@ def getSidebar(request):
     project_type = data_base.retreive_project_type(int(project_id))
     if project_type == "Data Processing":
         sidebar_html = render_to_string('data_processing_project.html',request=request)
-    elif project_type == "Cash Forecasting":
-        sidebar_html = render_to_string('cash_forecasting_project.html',request=request)
     else:
         sidebar_html = render_to_string('image_processing_project.html', request=request)
-
-    return JsonResponse({'sidebar_html': sidebar_html, 'p_type': project_type})
+    return JsonResponse({'sidebar_html': sidebar_html,'p_type':project_type})
 
 
 
@@ -112,7 +106,7 @@ def right_side_bar(request):
                 saved_models_info_html = "<p>No models are saved for this project</p>"
             else:
                 context = {"savedmodels": saved_models_accuracy}
-                saved_models_info_html = render_to_string("Controls/saved_models_info.html",
+                saved_models_info_html=render_to_string("Controls/saved_models_info.html",
                                                         context=context,request=request)
 
         saved_cluster_models = []
@@ -163,27 +157,6 @@ def right_side_bar(request):
                              'saved_models_info_html': saved_models_info_html,
                              'saved_cluster_models_info_html': saved_cluster_models_info_html,
                              'saved_regression_models_info_html': saved_regression_models_info_html})
-
-    elif project_type == 'Cash Forecasting':
-        data_frame = data_base.find_data_frame(int(project_id))
-        all_be_name_list = list(sorted(set(data_frame.billing_entity)))
-        # dic = create_dic(data_frame)
-        # be_name = list(dic.keys())
-        row = data_frame.shape[0]
-        col = data_frame.shape[1]
-        features_dtypes = data_frame.dtypes.apply(lambda feature: feature.name).to_dict()
-        dtypes = data_frame.dtypes.value_counts()
-        memory = data_frame.memory_usage().sum()
-        memory = memory * 0.001
-        memory = round(memory, 2)
-        context1 = {'row': row, 'col': col, 'features_dtypes': features_dtypes, 'dtypes': dtypes, 'memory': memory}
-        context2 = {'be_name': all_be_name_list}
-        right_side_bar_html = render_to_string('Controls/cash_rightsidebar.html', context=context1, request=request)
-        billing_entity_html = render_to_string('Cash_Forecasting/billing_entity.html', context=context2, request=request)
-        return JsonResponse({'project_type': project_type,
-                             'right_side_bar_html': right_side_bar_html,
-                             'billing_entity_html': billing_entity_html})
-
     else:
         labels = []
         acc = 0
@@ -255,14 +228,14 @@ def plotting(request):
     choose_features_distribution_html = render_to_string("Charts/distributionplot.html", context=context, request=request)
     features = obj_exp_data_analysis.features_list()
     features.remove(numerical_features[1])
-    features.insert(0, numerical_features[1])
+    features.insert(0,numerical_features[1])
     context = {'features': numerical_features, 'features1': features}
     choose_features_scatter_html = render_to_string("Charts/scatterplot.html", context=context, request=request)
     choose_features_box_html = render_to_string("Charts/boxplot.html", context=context, request=request)
-    return JsonResponse({'plotting_html': plotting_html, 'choose_features_distribution_html': choose_features_distribution_html,
-                         'distribution_plot_html': distribution_plot_html, 'choose_features_scatter_html': choose_features_scatter_html,
-                         'scatter_plot_html': scatter_plot_html,'choose_features_box_html': choose_features_box_html,
-                         'box_plot_html': box_plot_html, 'correlation_plot_html': correlation_plot_html,
+    return JsonResponse({'plotting_html': plotting_html,'choose_features_distribution_html':choose_features_distribution_html,
+                         'distribution_plot_html':distribution_plot_html,'choose_features_scatter_html':choose_features_scatter_html,
+                         'scatter_plot_html':scatter_plot_html,'choose_features_box_html':choose_features_box_html,
+                         'box_plot_html': box_plot_html,'correlation_plot_html':correlation_plot_html,
                          'correlation_plot_heading': '<label>Correlation Plot</label>'
                          })
 
@@ -1656,381 +1629,3 @@ def image_handling(request):
     prediction = predict_cell(project_id, img_url)
     return JsonResponse({'predict': prediction})
 
-
-@csrf_exempt
-def cf_basicstats(request):
-    project_id = int(request.POST['project_id'])
-    be_name = request.POST['be_name']
-    data_base = SparkDataBase()
-    data_frame = data_base.find_data_frame(int(project_id))
-
-    subset_df = data_frame[data_frame['billing_entity'] == be_name]
-
-    if be_name == 'All Adventist W':
-        daily_stats = daily_transformation(subset_df)["total_payments"].describe()
-        daily_stats = daily_stats.reset_index()
-        daily_stats.columns = ['Index', 'Daily_stats']
-
-        weekly_stats = weekly_transformation(subset_df)["total_payments"].describe()
-        weekly_stats = weekly_stats.reset_index()
-        weekly_stats.columns = ['Index', 'Weekly_stats']
-
-        monthly_stats = monthly_transformation(subset_df)["total_payments"].describe().reset_index()
-        monthly_stats.columns = ['Index', 'Monthly_stats']
-
-        basicStats = pd.merge(daily_stats, weekly_stats, on='Index')
-        basicStats = pd.merge(basicStats, monthly_stats, on='Index')
-
-        basicStats.set_index('Index', inplace=True)
-        basicStats.drop('count', axis=0, inplace=True)
-
-        basicStats_html = basicStats.to_html(classes=["table", "table-responsive", "table-bordered", "table-hover"])
-        basic_stats_render = render_to_string('Cash_Forecasting/basic_stats.html', request=request)
-        return JsonResponse({'basicStats': basicStats_html, 'basic_stats_html': basic_stats_render})
-
-    else:
-        daily_stats = daily_transformation(subset_df)["total_payments"].describe()
-        daily_stats = daily_stats.reset_index()
-        daily_stats.columns = ['Index', 'Daily_stats']
-
-        weekly_stats = weekly_transformation(subset_df)["total_payments"].describe()
-        weekly_stats = weekly_stats.reset_index()
-        weekly_stats.columns = ['Index', 'Weekly_stats']
-
-        monthly_stats = monthly_transformation(subset_df)["total_payments"].describe().reset_index()
-        monthly_stats.columns = ['Index', 'Monthly_stats']
-
-        basicStats = pd.merge(daily_stats, weekly_stats, on='Index')
-        basicStats = pd.merge(basicStats, monthly_stats, on='Index')
-
-        basicStats.set_index('Index', inplace=True)
-        basicStats.drop('count', axis=0, inplace=True)
-
-        no_of_months = str(count_of_months(subset_df))
-
-        df = pd.DataFrame()
-        df = data_frame.groupby(['billing_entity', 'MonthYear'])['total_payments'].sum().reset_index()
-        df = pd.DataFrame(df.groupby('billing_entity')['total_payments'].mean())  # avg of monthly payments of each BE
-        df.rename(columns={'total_payments': 'monthly_mean'}, inplace=True)
-        df.drop('All Adventist W', axis=0, inplace=True)
-
-        labels = ["count", "mean", "std", "min", "25%", "50%", "75%", "max"]
-        df1 = pd.DataFrame(df.describe())
-        df1.columns = ['monthly_mean']
-        BE_monthly_res = dict(zip(labels, df1['monthly_mean']))
-
-        ############## Means of a particular Billing Entity ########################
-
-        subset_monthly_mean = int(monthly_stats[monthly_stats.Index == "mean"]['Monthly_stats'])
-
-        ###########################TOTAL BE COMPARISON CHECK#########################
-
-        total_comp_monthly = [BE_monthly_res["75%"], BE_monthly_res["50%"], BE_monthly_res["25%"]]
-
-        category = ""
-        if subset_monthly_mean >= total_comp_monthly[0]:
-            category = "LARGE"
-        elif total_comp_monthly[0] > subset_monthly_mean >= total_comp_monthly[1]:
-            category = "MEDIUM"
-        else:
-            category = "SMALL"
-
-        ############### Highlighting the selected be mean in the boxplot#################################
-        be_monthly_mean = round(float(monthly_stats[monthly_stats["Index"] == "mean"]['Monthly_stats']), 2)
-        all_be_mean_list = list(df['monthly_mean'].apply(lambda x: round(x, 2)))
-        be_mean_index = all_be_mean_list.index(be_monthly_mean)
-        monthly_box_plot = payments_box_plot(df['monthly_mean'], be_mean_index)
-
-        basicStats_html = basicStats.to_html(classes=["table", "table-responsive", "table-bordered", "table-hover"])
-        basic_stats_render = render_to_string('Cash_Forecasting/basic_stats.html', request=request)
-        return JsonResponse({'basicStats': basicStats_html, 'basic_stats_html': basic_stats_render,
-                             'months_count': no_of_months, 'category': category, 'monthly_box_plot': monthly_box_plot})
-
-
-@csrf_exempt
-def cf_timeseries(request):
-    project_id = int(request.POST['project_id'])
-    be_name = request.POST['be_name']
-    data_base = SparkDataBase()
-    data_frame = data_base.find_data_frame(int(project_id))
-
-    # subset_df = subset_be_data(be_name, data_frame)
-    subset_df = data_frame[data_frame['billing_entity'] == be_name]
-
-    monthly_sum = monthly_transformation(subset_df)
-    rolling_plot_html = timeseries_scatter_plot(monthly_sum)
-    # line_chart_html = timeseries_line_chart_plot(monthly_sum2, years1, sampling_input)
-    line_chart_html = timeseries_line_chart_plot(monthly_sum)
-    bar_plot_html = timeseries_bar_plot(monthly_sum)
-
-    time_series_render = render_to_string('Cash_Forecasting/time_series_plots.html', request=request)
-    return JsonResponse({'ts_html': time_series_render, 'rolling_plot_html': rolling_plot_html,
-                         'line_chart_html': line_chart_html, 'bar_plot_html': bar_plot_html})
-
-
-@csrf_exempt
-def cf_weekdays(request):
-    project_id = int(request.POST['project_id'])
-    be_name = request.POST['be_name']
-    data_base = SparkDataBase()
-    data_frame = data_base.find_data_frame(int(project_id))
-
-    # subset_df = subset_be_data(be_name, data_frame)
-    subset_df = data_frame[data_frame['billing_entity'] == be_name]
-    weekday_sum_merged, monthyears, weekday_sum, weekday_sum_mean = weekday_transformation(subset_df)
-
-    wd_bar_plot_html = wd_bar_plot(weekday_sum_mean)
-    wd_line_chart_html = wd_line_chart(weekday_sum, monthyears)
-    # wd_decompose_graph_html = wd_decompose_graph(resample)
-
-    weekdays_html_render = render_to_string('Cash_Forecasting/weekday_plots.html', request=request)
-    return JsonResponse({'wd_html': weekdays_html_render, 'wd_bar_plot_html': wd_bar_plot_html,
-                         'wd_line_chart_html': wd_line_chart_html})
-
-
-@csrf_exempt
-def cf_encounter_class(request):
-    project_id = int(request.POST['project_id'])
-    be_name = request.POST['be_name']
-    data_base = SparkDataBase()
-    data_frame = data_base.find_data_frame(int(project_id))
-    # subset_df = subset_be_data(be_name, data_frame)
-    subset_df = data_frame[data_frame['billing_entity'] == be_name]
-
-    encounter_class_pivot, enc_overall = encounter_transformation(subset_df)
-    ec_line_chart_html = ec_line_plot(encounter_class_pivot)
-    ec_bar_plot_html = ec_bar_plot(enc_overall)
-    ec_footfall_html = ec_footfall_plot(subset_df)
-    ec_charges_html = ec_charges_plot(subset_df)
-
-    encounter_class_html_render = render_to_string('Cash_Forecasting/encounter_class.html', request=request)
-    return JsonResponse({'ec_html': encounter_class_html_render, 'ec_line_chart_html': ec_line_chart_html,
-                         'ec_bar_plot_html': ec_bar_plot_html, 'ec_footfall_html': ec_footfall_html,
-                         'ec_charges_html': ec_charges_html})
-
-
-@csrf_exempt
-def cf_financial_class(request):
-    project_id = int(request.POST['project_id'])
-    be_name = request.POST['be_name']
-    data_base = SparkDataBase()
-    data_frame = data_base.find_data_frame(int(project_id))
-    # dic = create_dic(data_frame)
-    # subset_df = subset_be_data(be_name, data_frame)
-    subset_df = data_frame[data_frame['billing_entity'] == be_name]
-    f_data_monthly, f_data_line_pivot = financial_transformation(subset_df)
-    fc_line_plot_html = fc_line_plot(f_data_line_pivot)
-    fc_bar_plot_html = fc_bar_plot(f_data_monthly)
-    fc_footfall_html = fc_footfall(subset_df)
-    fc_charges_html = fc_charges(subset_df)
-
-    financial_class_html_render = render_to_string('Cash_Forecasting/financial_class.html', request=request)
-    return JsonResponse({'fc_html': financial_class_html_render, 'fc_line_chart_html': fc_line_plot_html,
-                         'fc_bar_plot_html': fc_bar_plot_html, 'fc_footfall_html': fc_footfall_html,
-                         'fc_charges_html': fc_charges_html})
-
-
-@csrf_exempt
-def cf_xregs(request):
-    xreg_html_render = render_to_string('Cash_Forecasting/xregs.html', request=request)
-    return JsonResponse({'xr_html': xreg_html_render})
-
-
-@csrf_exempt
-def cf_xregs_select(request):
-    project_id = request.GET['project_id']
-    be_name = request.GET['be_name']
-    xreg = request.GET['x_regs']
-    data_base = SparkDataBase()
-    data_frame = data_base.find_data_frame(int(project_id))
-    # dic = create_dic(data_frame)
-    # subset_df = subset_be_data(be_name, data_frame)
-    subset_df = data_frame[data_frame['billing_entity'] == be_name]
-    monthly_res = monthly_transformation(subset_df)
-    monthly_res_xregs = monthly_transformation_ext_reg(subset_df, xreg)
-    ts_ext_reg_plot_html = timeseries_ext_reg(subset_df, monthly_res_xregs, xreg)
-    lagged_plot_html = ff_lagged_plot(subset_df, monthly_res, xreg)
-    exreg_correalation_plot_html = ff_per_month(subset_df, monthly_res, xreg)
-    exreg_correalation_stats_html = ff_xreg_correlation(subset_df, monthly_res, xreg)
-    exreg_correalation_stats_html = exreg_correalation_stats_html.to_html(classes=["table", "table-responsive", "table-bordered", "table-hover"])
-    xreg_html_render = render_to_string('Cash_Forecasting/xregs.html', request=request)
-    return JsonResponse({'xreg_plot_html_render': xreg_html_render,'ts_ext_reg_plot_html':ts_ext_reg_plot_html, 'lagged_plot_html': lagged_plot_html,
-                         'exreg_correalation_plot_html': exreg_correalation_plot_html,
-                         'exreg_correalation_stats_html': exreg_correalation_stats_html})
-
-
-@csrf_exempt
-def cf_acf_pacf(request):
-    project_id = int(request.POST['project_id'])
-    be_name = request.POST['be_name']
-    data_base = SparkDataBase()
-    data_frame = data_base.find_data_frame(int(project_id))
-
-    # subset_df = subset_be_data(be_name, data_frame)
-    subset_df = data_frame[data_frame['billing_entity'] == be_name]
-
-    monthly_data = monthly_transformation(subset_df)
-    monthly_data['MonthYear'] = pd.to_datetime(monthly_data['MonthYear'])
-    acf_df = monthly_data.iloc[:, 0:4]
-    acf_df.set_index('MonthYear', inplace=True)
-    corr_df = pd.DataFrame()
-    # fetch ACF
-    ac, confint_ac = (acf(acf_df['total_payments'], nlags=25, alpha=0.05))
-    pac, confint_pac = (pacf(acf_df['total_payments'], nlags=25, alpha=0.05))
-    corr_df['ACF'] = list(ac)
-    corr_df['lower_acf'] = list(confint_ac[:, 0])
-    corr_df['upper_acf'] = list(confint_ac[:, 1])
-    corr_df['PACF'] = list(pac)
-    corr_df['lower_pacf'] = list(confint_pac[:, 0])
-    corr_df['upper_pacf'] = list(confint_pac[:, 1])
-    acf_plot_html = acf_plot(corr_df)
-    pacf_plot_html = pacf_plot(corr_df)
-    acf_pacf_html_render = render_to_string('Cash_Forecasting/acf_pacf.html', request=request)
-    return JsonResponse({'acf_pacf_html': acf_pacf_html_render, 'acf_plot_html': acf_plot_html,
-                         'pacf_plot_html': pacf_plot_html})
-
-
-@csrf_exempt
-def cf_forecast(request):
-    project_id = int(request.POST['project_id'])
-    be_name = request.POST['be_name']
-    data_base = SparkDataBase()
-    data_frame = data_base.find_data_frame(int(project_id))
-    subset_df = data_frame[data_frame['billing_entity'] == be_name]
-    directory = r"mlp/SaveCashData/"
-
-    n_periods = get_best_lag(subset_df, be_name)
-    lags = n_periods
-
-    monthly_data = monthly_transformation(subset_df)
-    var = 'total_payments'
-    series = monthly_data[var]
-    series.index = pd.DatetimeIndex(monthly_data.MonthYear)
-
-    ### Fetch external regressors- weekdays, Payor wise PMI, Payor wise footfall,Payor wise charges
-    combined_wday, xreg_wday, pred_xreg_wday = wday_per_month_new(subset_df, 3)  # get weekdays
-    percent_flag = 1  # convert PMI, charges and footfall data into percentage so that data is in same scale
-    act_xreg_pmi, pred_xreg_pmi = ec_PMI(subset_df, 3, lags, percent_flag)  # get PMI
-    f_agg_var = 'footfall'
-    act_xreg_wd, pred_xreg_wd = ec_Xreg(subset_df, f_agg_var, 3, lags, percent_flag)  # get footfall
-    c_agg_var = 'total_charge'
-    act_xreg_cc, pred_xreg_cc = ec_Xreg(subset_df, c_agg_var, 3, lags, percent_flag)  # get charges
-
-    ### Combine all external regressors
-    df1 = pd.merge(act_xreg_pmi, act_xreg_wd, left_index=True, right_index=True)  # merge pmi with footfall
-    df2 = pd.merge(df1, act_xreg_cc, left_index=True, right_index=True)  # merge df1 with charges
-    act_xreg = df2.copy()  # copy df2
-    ## Feature selection is done to remove less significant regressors
-    avg_xreg = act_xreg.apply(lambda row: np.mean(row)).sort_values(ascending=False)  # check mean of df2 columns
-    xreg_cols_varmax = avg_xreg[0:2].index
-    xreg_all = act_xreg.apply(lambda row: np.std(row)).sort_values(ascending=False)  # check std of df2 columns
-    xreg_com = pd.concat([avg_xreg, xreg_all], axis=1, sort=True)  # combine mean and sd
-    xreg_com.columns = ['avg', 'std']
-    xreg_cols = xreg_com[(xreg_com['avg'] > 5) & (xreg_com['std'] > 0.5)].index  # Feature Selection based on average percent contribution and variance
-    df2 = df2[xreg_cols]  # filter out selected features from df2
-    df2 = pd.concat([df2, xreg_wday], axis=1)  # combine weekdays data with df2
-    df = pd.merge(pd.DataFrame(series), df2, on=df2.index, how='inner')  # final regressor dataframe to be used with models
-    df.rename(columns={'key_0': 'MonthYear'}, inplace=True)
-    df.set_index('MonthYear', inplace=True)
-    df.fillna(0, inplace=True)
-
-    ### similarly merge unseen data and filter out significant columns. This is required for forecast plots
-    df_unseen = pd.merge(pred_xreg_pmi, pred_xreg_wd, left_index=True,
-                         right_index=True)  # merge unseen pmi with footfall
-    df_unseen = pd.merge(df_unseen, pred_xreg_cc, left_index=True,
-                         right_index=True)  # merge unseen charges with above dataframe
-    df_unseen = pd.concat([df_unseen, pred_xreg_wday], axis=1)  # merge weekdays of unseen months
-    df_unseen['total_payments'] = np.nan  # fill NA payments for unseen payments as this format is compatible with the
-    df_unseen = df_unseen[df.columns]  # reorder the columns just like df(i.e seen data)
-
-    print("DF :",df.tail(5))
-    print('DF_unseen',df_unseen)
-
-    ################## START MODELLING ###############
-    date = max(df.index) - relativedelta(months=3)
-    data = df[:date]
-    rem_data = 3
-    varmax_cols = np.append(xreg_cols_varmax, xreg_wday.columns)
-    dataV = df[:date][np.append(var, varmax_cols)]
-
-    # For Arima
-    # Divide train data into three sets:
-    # 1. Train
-    # 2. Arima xreg choosing set
-    # 3. Test Set for Running all models and choosing best model
-
-    train, test = train_test_split(data, n_test=3)
-    trainV, testV = train_test_split(dataV, n_test=3)
-
-    # train and test for non linear model- Random Forest
-    x_train = train.iloc[:, 1:]
-    y_train = train.iloc[:, 0]
-
-    print("x_train:",x_train.tail(5))
-    print("y_train:",y_train.tail(5))
-
-    dt1 = date - relativedelta(months=rem_data)
-    x_test, var_flag, var_mape = create_test(df, train, dt1, n_periods, rem_data)
-    y_test = df.loc[x_test.index][var]
-
-    print("x_test (predicted)",x_test)
-    print("y_test",y_test)
-
-    rf_model, fitted_rf, fimp_sorted, confint = random_forest(x_train, y_train, x_test)
-
-    print("Random Forest Test predictions \n",fitted_rf)
-
-    # ARIMA model
-    best_model_arima, model_arima, fitted_arima, confint_arima = get_arima_best(x_train, y_train, y_test, x_test, var, rem_data)
-
-    print("ARIMA Model Test predictions \n", fitted_arima)
-
-    ########## Varmax Model ############
-    model_varmax, fitted_varmax, confint = varmax_model_test(trainV, x_test, rem_data)
-
-    print("VARMAX Model Test predictions \n",fitted_varmax)
-
-    model_avg, fitted_avg, confint_avg = moving_average(y_train, x_test, rem_data)
-
-    print("MA Model Test predictions \n", fitted_avg)
-
-    # sort models based on least mape
-    model_list = []
-    # Create MAPE dictionary on test set
-    model_list.append(['rf', mape(y_test, fitted_rf), rf_model])
-    model_list.append(['varmax', mape(y_test, fitted_varmax), model_varmax])
-    model_list.append(['moving_average', mape(y_test, fitted_avg), model_avg])
-    model_list.append([best_model_arima, mape(y_test, fitted_arima), model_arima])
-    model_list.sort(key=lambda tup: tup[1])
-
-    print("Model List \n",model_list)
-
-    ### Create validation set and check selected Model Performance
-    x_val, var_flag, var_mape = create_test(df, data, date, n_periods, rem_data)
-    y_val = df.loc[x_val.index][var]
-
-    # recreate train
-    x_train1 = data.iloc[:, 1:]
-    y_train1 = data.iloc[:, 0]
-
-    # model for seen data
-    fit, fitted, best_model_name, test_confint = best_fit(x_train1, y_train1, x_val, y_val, model_list, rem_data, var, dataV)
-
-    if best_model_name == 'rf':
-        y_unseen, un_confint, plot_fc_test_train_html, test_mape = make_plot(be_name, var, y_train1, y_val, df_unseen,
-                                                                                               fitted, df,
-                                                                                               n_periods, rem_data, date, best_model_name,
-                                                                                               model_list, dataV, test_confint)
-        feature_imp_graph = rf_feature_importance(fit, x_train1)
-        forecast_model_html_render = render_to_string('Cash_Forecasting/forecast_rf.html', request=request)
-        return JsonResponse({'fm_html': forecast_model_html_render, 'fm_model_html': plot_fc_test_train_html,
-                             'mape': test_mape, 'best_model': best_model_name, "rf_feature_imp_html": feature_imp_graph})
-    else:
-        y_unseen, un_confint, plot_fc_test_train_html, test_mape = make_plot(be_name, var, y_train1,y_val, df_unseen,
-                                                                             fitted, df, n_periods, rem_data,
-                                                                             date, best_model_name, model_list, dataV,
-                                                                             test_confint)
-    # make plot
-        forecast_model_html_render = render_to_string('Cash_Forecasting/forecast_ar.html', request=request)
-        return JsonResponse({'fm_html': forecast_model_html_render, 'fm_model_html': plot_fc_test_train_html,
-                             'mape': test_mape, 'best_model': best_model_name})

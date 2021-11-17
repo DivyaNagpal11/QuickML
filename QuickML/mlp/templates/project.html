@@ -17,7 +17,6 @@
         <script src="{% static 'Scripts/ClusteringJS.js' %}"></script>
         <script src="{% static 'Scripts/RegressionJS.js' %}"></script>
         <script src="{% static 'Scripts/ImageJS.js' %}"></script>
-        <script src="{% static 'Scripts/cash_forecasting.js' %}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
             integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
             crossorigin="anonymous"></script>
@@ -53,10 +52,6 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div id="cash" class="dropdown">
                         </div>
                     </li>
                     <li class="nav-item">
@@ -109,7 +104,6 @@
                               <select id="p_type" name="Project Type">
                                 <option value="Data Processing">Data Processing</option>
                                 <option value="Image Processing">Image Processing</option>
-                                <option value="Cash Forecasting">Cash Forecasting</option>
                               </select>
                         </div>
                         <input id="choosefile" type="file"
@@ -144,8 +138,6 @@
                     <div class="popup">
                     </div>
                 </div>
-                <div id="header-info">
-                </div>
                 <div id="contentdata">
                 </div>
             </div>
@@ -153,6 +145,7 @@
             <div id="rightsidebar" class="rightbar">
             </div>
         </div>
+
         </div>
     </body>
 </html>

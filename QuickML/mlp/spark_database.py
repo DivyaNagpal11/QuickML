@@ -9,12 +9,8 @@ from os.path import isfile, join
 from .unziping import *
 from .image_processing import *
 import datetime as dt
-import collections
-import time
 
 spark = SparkSession.builder.enableHiveSupport().getOrCreate()
-spark.conf.set("spark.sql.execution.arrow.enabled", "true")
-# sc = spark.sparkContext
 sql = SQLContext(spark)
 spark.sql('create database IF NOT EXISTS  quickml_database')
 spark.sql('use quickml_database')
@@ -167,16 +163,13 @@ class SparkDataBase:
             project_id = a+1
         return project_id
 
-    def read_data(self, name, file, project_id, status,type):
+    def read_data(self, name, file, project_id, status):
         filename, extension = str(file).split('.')
-        if type == "Image Processing":
-            spark.sql(
-                "INSERT INTO projects VALUES ({0},'{1}','{2}', '{3}')".format(project_id, name, type,
-                                                                              status))
+        if extension == "zip":
+            spark.sql("INSERT INTO projects VALUES ({0},'{1}','{2}', '{3}')".format(project_id, name, "Image Processing", status))
             unzip(file, project_id)
             create_img_labels(project_id)
-
-        elif type == "Data Processing":
+        else:
             try:
                 if extension == "xlsx" or extension == "xls":
                     data_frame = pd.read_excel(file, na_values=['?'])
@@ -195,38 +188,6 @@ class SparkDataBase:
                 raise Exception()
             else:
                 spark.sql("INSERT INTO projects VALUES ({0},'{1}', '{2}','{3}')".format(project_id, name, "Data Processing", status))
-
-        else:
-            try:
-                if extension == "xlsx" or extension == "xls":
-                    ah_data = pd.read_excel(file, na_values=['?'])
-
-                else:
-                    ah_data = pd.read_csv(file, na_values=['?'])
-
-                ah_data['posted_date'] = pd.to_datetime(ah_data['posted_date'])
-                ah_data = ah_data.sort_values('posted_date').reset_index(drop=True)
-
-                columns = list(ah_data)
-                for i in range(0, len(columns)):
-                    columns[i] = str.strip(columns[i])
-                    columns[i] = columns[i].replace(' ', '_')
-
-                ah_data.columns = columns
-
-
-                spark_df = sql.createDataFrame(ah_data)
-
-
-                spark_df.write.mode('overwrite').saveAsTable('org_df' + str(project_id))
-                spark_df.write.mode('overwrite').saveAsTable('cur_df' + str(project_id))
-                spark_df.write.mode('overwrite').saveAsTable('osb_df' + str(project_id))
-            except Exception as e:
-                raise Exception()
-            else:
-                spark.sql(
-                    "INSERT INTO projects VALUES ({0},'{1}', '{2}','{3}')".format(project_id, name, "Cash Forecasting",
-                                                                                  status))
 
     def update_document(self, data_frame, project_id):
         one_step_back_data_frame = self.find_data_frame(project_id)
@@ -259,7 +220,7 @@ class SparkDataBase:
         model_name += str(project_id)+'.pkl'
         file_path += model_name
         with open(Path(file_path),'wb') as handle:
-            pickle.dump(model, handle)
+            pickle.dump(model,handle)
 
     def load_model(self, project_id, algorithm):
         file_path = r"saved_models/"
@@ -291,17 +252,17 @@ class SparkDataBase:
                 test_accuracy.append(each.test_accuracy)
             for each in res_df.select('accuracy').collect():
                 accuracy.append(each.accuracy)
-            res_data = []
+            res_data=[]
             for i in range(0,len(accuracy)):
-                new = {}
-                new['algorithm'] = algorithm[i]
+                new={}
+                new['algorithm']=algorithm[i]
                 new['train_accuracy'] = round(train_accuracy[i],2)
                 new['test_accuracy'] = round(test_accuracy[i],2)
                 new['accuracy'] = round(accuracy[i],2)
                 res_data.append(new)
             return res_data
 
-    def default_input_parameters(self, algorithm):
+    def default_input_parameters(self,algorithm):
         algorithms = ['K Nearest Neighbour', 'Decision Tree', 'Random Forest', 'Support Vector Machine', 'XgBoost']
         if algorithm == algorithms[0]:
             return input_parameters_knn
@@ -314,7 +275,7 @@ class SparkDataBase:
         else:
             return input_parameters_xgb
 
-    def load_models_input_parameters(self, project_id, algorithm):
+    def load_models_input_parameters(self,project_id,algorithm):
         algorithms = ['K Nearest Neighbour', 'Decision Tree', 'Random Forest', 'Support Vector Machine', 'XgBoost']
         if algorithm == algorithms[0]:
             res_df = spark.sql("select * from saved_input_parameters_knn where project_id={0}".format(project_id))
@@ -352,7 +313,7 @@ class SparkDataBase:
                 input_parameters.append(res_df.first()[i])
             return input_parameters
 
-    def save_input_parameters(self, project_id, algorithm, input_parameters):
+    def save_input_parameters(self,project_id,algorithm,input_parameters):
         algorithms = ['K Nearest Neighbour', 'Decision Tree', 'Random Forest', 'Support Vector Machine', 'XgBoost']
         if algorithm == algorithms[0]:
             a = spark.sql(
