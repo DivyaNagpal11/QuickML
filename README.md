@@ -22,7 +22,9 @@ a) Project Handling:
 	        1.Data Processing
 	        2.Image Processing 
 	b) Load Project:
-	    This is used to load the project.For working on data processing project a csv file should be uploaded and for an image processing project a zip file should be uploaded which should contain the different types of images in different folders. 
+	    This is used to load the project.
+	    For working on data processing project a csv file should be uploaded.
+	    For an image processing project a zip file should be uploaded which should contain the different categories/classes of images in different folders. 
 	c) Delete Project:
 	    This is used to delete the project.
 	d) Undo:
