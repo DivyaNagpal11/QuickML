@@ -1,6 +1,6 @@
 # About QuickML
 
-Build a Cerner specific web application which will help speed up development and interpretation of machine learning ideas by automating repetitive tasks to help with exploratory data analysis, feature selection, algorithm comparisons and containerization of models. 
+Build a Cerner specific web application which will help speed up development and interpretation of machine learning ideas by automating repetitive tasks to help with exploratory data analysis, feature selection, algorithm comparisons and containerization of models. It has been divided 2 components based on structured and unstructured data (images).
 
 Objectives of the Project
 
